@@ -8,7 +8,7 @@ The HTML file used for the interaction experiments are located in the root of th
 
 - `TypingBug.html`
 
-These files intentionally contain accessibility and interaction issues used to compare framework behavior.
+This file intentionally contain accessibility and interaction issues used to compare framework behavior.
 
 ## Technologies
 
