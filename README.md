@@ -25,3 +25,6 @@ This repository explores the difference between:
 - validating authentic user interaction behavior
 
 It demonstrates how Playwright can successfully interact with elements using the .fill() method even when real keyboard users would fail while Selenium's .SendKeys() method doesn't have this problem.
+
+[FidelityTests.webm](https://github.com/user-attachments/assets/b7ca1b0f-f0ae-4afc-bce6-57e03b2c96c4)
+
