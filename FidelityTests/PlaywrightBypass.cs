@@ -43,7 +43,7 @@ public class PlaywrightBypass : PageTest
     public async Task Should_Interact_With_Tabindex_Minus1_Elements()
     {
         await page!.GotoAsync(
-            "file:///C:/Users/Personal/Desktop/TypingBug.html"
+            "file:///C:/Users/Personal/source/repos/FidelityTests/TypingBug.html"
         );
 
         // Fill input that cannot receive TAB focus
@@ -72,7 +72,7 @@ public class PlaywrightBypass : PageTest
     public async Task Tab_Key_Should_Not_Focus_Input()
     {
         await page!.GotoAsync(
-            "file:///C:/Users/Personal/Desktop/TypingBug.html"
+            "file:///C:/Users/Personal/source/repos/FidelityTests/TypingBug.html"
         );
 
         // Press TAB

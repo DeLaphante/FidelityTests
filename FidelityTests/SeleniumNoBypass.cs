@@ -32,7 +32,7 @@ namespace SeleniumFocusTest
         public void Should_Interact_With_Tabindex_Minus1_Elements()
         {
             driver.Navigate().GoToUrl(
-                "file:///C:/Users/Personal/Desktop/TypingBug.html"
+                "file:///C:/Users/Personal/source/repos/FidelityTests/TypingBug.html"
             );
 
             // Locate input
@@ -61,7 +61,7 @@ namespace SeleniumFocusTest
         public void Tab_Key_Should_Not_Focus_Input()
         {
             driver.Navigate().GoToUrl(
-                "file:///C:/Users/Personal/Desktop/TypingBug.html"
+                "file:///C:/Users/Personal/source/repos/FidelityTests/TypingBug.html"
             );
 
             // Send TAB key to page
