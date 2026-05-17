@@ -115,4 +115,35 @@ public class PlaywrightBypass : PageTest
         // Pause so behavior is visible
         await page.WaitForTimeoutAsync(3000);
     }
+
+    [TestMethod]
+    public async Task Playwright_Requeries_After_Rerender()
+    {
+        await page.GotoAsync(
+            "file:///C:/Users/Personal/Desktop/ReRenderBug.html"
+        );
+
+        // Lazy locator (does NOT hold old DOM node)
+        var firstResult =
+            page.Locator("li").First;
+
+        // Wait long enough for full re-render
+        await page.WaitForTimeoutAsync(3000);
+
+        // Playwright re-scans DOM at click time
+        await firstResult.ClickAsync();
+
+        // Verify click succeeded
+        var status =
+            await page.Locator("#status")
+                .InnerTextAsync();
+
+        Assert.AreEqual(
+            "Clicked: First Search Result",
+            status
+        );
+
+        // Pause so behavior is visible
+        await page.WaitForTimeoutAsync(3000);
+    }
 }
