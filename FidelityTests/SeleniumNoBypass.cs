@@ -2,8 +2,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.UI;
-using System;
 using System.Threading;
 
 namespace SeleniumFocusTest
@@ -87,16 +85,11 @@ namespace SeleniumFocusTest
                 "file:///C:/Users/Personal/source/repos/FidelityTests/OverlayBug.html"
             );
 
-            // Wait for first button
-            var button1 = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(d => d.FindElement(By.Id("button1")));
+            // First click creates invisible overlay
+            driver.FindElement(By.Id("button1")).Click();
 
-            // First click creates overlay bug
-            button1.Click();
-
-            // Wait for second button
-            var button2 = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(d => d.FindElement(By.Id("button2")));
-            // Selenium exposes overlay interception here
-            button2.Click();
+            // Selenium immediately detects interception
+            driver.FindElement(By.Id("button2")).Click();
 
         }
     }
