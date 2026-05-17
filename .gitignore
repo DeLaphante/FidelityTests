@@ -56,3 +56,4 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 /.vs/FidelityTests.slnx/v18/TestStore/0
+/.vs
