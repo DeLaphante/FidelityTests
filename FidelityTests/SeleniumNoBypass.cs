@@ -98,7 +98,6 @@ namespace SeleniumFocusTest
             // Selenium exposes overlay interception here
             button2.Click();
 
-            Thread.Sleep(3000);
         }
     }
 }
