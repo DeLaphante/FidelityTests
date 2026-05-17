@@ -99,7 +99,7 @@ namespace SeleniumFocusTest
         public void Selenium_Should_Expose_Stale_Element_Bug()
         {
             driver.Navigate().GoToUrl(
-                "file:///C:/Users/Personal/Desktop/ReRenderBug.html"
+                "file:///C:/Users/Personal/source/repos/FidelityTests/ReRenderBug.html"
             );
 
             // Selenium stores actual DOM node reference

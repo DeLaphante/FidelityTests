@@ -120,7 +120,7 @@ public class PlaywrightBypass : PageTest
     public async Task Playwright_Requeries_After_Rerender()
     {
         await page.GotoAsync(
-            "file:///C:/Users/Personal/Desktop/ReRenderBug.html"
+            "file:///C:/Users/Personal/source/repos/FidelityTests/ReRenderBug.html"
         );
 
         // Lazy locator (does NOT hold old DOM node)
