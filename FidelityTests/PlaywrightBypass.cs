@@ -88,4 +88,31 @@ public class PlaywrightBypass : PageTest
 
         Assert.AreEqual("A", activeTag);
     }
+
+    [TestMethod]
+    public async Task Playwright_Waits_For_Overlay_To_Disappear()
+    {
+        await page.GotoAsync(
+            "file:///C:/Users/Personal/source/repos/FidelityTests/OverlayBug.html"
+        );
+
+        // First button creates invisible overlay
+        await page.Locator("#button1").ClickAsync();
+
+        // Playwright will wait/retry here
+        // until the overlay disappears
+        await page.Locator("#button2").ClickAsync();
+
+        // Verify final state
+        var status =
+            await page.Locator("#status").InnerTextAsync();
+
+        Assert.AreEqual(
+            "Second button was clicked successfully",
+            status
+        );
+
+        // Pause so behavior is visible
+        await page.WaitForTimeoutAsync(3000);
+    }
 }
