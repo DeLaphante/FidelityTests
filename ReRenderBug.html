@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stale Element Re-Render Bug</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 40px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            max-width: 700px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        li {
+            background: #eee;
+            margin-top: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        li:hover {
+            background: #ddd;
+        }
+
+        #status {
+            margin-top: 25px;
+            font-weight: bold;
+            color: darkred;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Background Re-Render Bug</h1>
+
+    <p>
+        The app simulates a background API refresh that completely
+        re-renders the search results list after the page loads.
+    </p>
+
+    <ul id="results">
+        <li>First Search Result</li>
+        <li>Second Search Result</li>
+        <li>Third Search Result</li>
+    </ul>
+
+    <div id="status">
+        Waiting for interaction...
+    </div>
+
+</div>
+
+<script>
+
+    const results = document.getElementById("results");
+    const status = document.getElementById("status");
+
+    function attachClickHandlers() {
+
+        document.querySelectorAll("li").forEach(item => {
+
+            item.addEventListener("click", () => {
+
+                status.innerText =
+                    "Clicked: " + item.innerText;
+            });
+        });
+    }
+
+    attachClickHandlers();
+
+    /*
+        Simulate background API update
+        that destroys and recreates DOM nodes
+    */
+    setTimeout(() => {
+
+        status.innerText =
+            "Background API refresh triggered full re-render";
+
+        results.innerHTML = `
+            <li>First Search Result</li>
+            <li>Second Search Result</li>
+            <li>Third Search Result</li>
+        `;
+
+        attachClickHandlers();
+
+    }, 2000);
+
+</script>
+
+</body>
+</html>
