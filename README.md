@@ -1,14 +1,33 @@
 # Selenium vs Playwright Interaction Fidelity Tests
 
-C#/.NET tests comparing Selenium WebDriver and Playwright interaction behavior. Demonstrates differences in keyboard navigation, tabindex accessibility issues, blocked key events, focus handling, and how direct automation APIs can bypass real user interaction paths and hide accessibility or UX defects.
+C#/.NET tests comparing Selenium WebDriver and Playwright interaction behavior. Demonstrates differences in keyboard navigation, tabindex accessibility issues, blocked key events, focus handling, overlay interception behavior, and how direct automation APIs can bypass real user interaction paths and hide accessibility or UX defects.
 
 ## Files
 
-The HTML file used for the interaction experiments are located in the root of the repository:
+The HTML files used for the interaction experiments are located in the root of the repository:
 
 - `TypingBug.html`
+- `OverlayBug.html`
 
-This file intentionally contain accessibility and interaction issues used to compare framework behavior.
+These files intentionally contain accessibility and interaction defects used to compare framework behavior.
+
+## Included Test Scenarios
+
+### Typing Fidelity Test
+
+Demonstrates how:
+- real keyboard typing can be broken
+- Playwright `.fill()` can still pass by bypassing parts of the keyboard interaction pipeline
+- Selenium `.SendKeys()` exposes the broken typing behavior more directly
+
+### Overlay Interception Test
+
+Demonstrates how:
+- an invisible overlay temporarily blocks a button
+- Selenium immediately throws `ElementClickInterceptedException`
+- Playwright waits/retries until the overlay disappears and then passes
+
+This highlights how interaction abstraction and auto-waiting heuristics can mask transient UI defects.
 
 ## Technologies
 
@@ -24,7 +43,17 @@ This repository explores the difference between:
 - validating DOM state
 - validating authentic user interaction behavior
 
-It demonstrates how Playwright can successfully interact with elements using the .fill() method even when real keyboard users would fail while Selenium's .SendKeys() method doesn't have this problem.
+It demonstrates how abstraction layers in automation frameworks can change defect visibility and interaction fidelity.
 
+The experiments focus on:
+- keyboard realism
+- accessibility behavior
+- focus handling
+- overlay interception
+- transient UI defects
+- direct DOM interaction vs real browser interaction flow
+
+## Videos
+
+### Typing Fidelity Experiment
 [FidelityTests.webm](https://github.com/user-attachments/assets/b7ca1b0f-f0ae-4afc-bce6-57e03b2c96c4)
-
