@@ -1,6 +1,6 @@
 # Selenium vs Playwright Interaction Fidelity Tests
 
-C#/.NET tests comparing Selenium WebDriver and Playwright interaction behavior. Demonstrates differences in keyboard navigation, tabindex accessibility issues, blocked key events, focus handling, overlay interception behavior, and how direct automation APIs can bypass real user interaction paths and hide accessibility or UX defects.
+C#/.NET tests comparing Selenium WebDriver and Playwright interaction behavior. Demonstrates differences in keyboard navigation, tabindex accessibility issues, blocked key events, focus handling, overlay interception behavior, stale element behavior, and how direct automation APIs can bypass real user interaction paths and hide accessibility or UX defects.
 
 ## Files
 
@@ -8,6 +8,7 @@ The HTML files used for the interaction experiments are located in the root of t
 
 - `TypingBug.html`
 - `OverlayBug.html`
+- `ReRenderBug.html`
 
 These files intentionally contain accessibility and interaction defects used to compare framework behavior.
 
@@ -28,6 +29,19 @@ Demonstrates how:
 - Playwright waits/retries until the overlay disappears and then passes
 
 This highlights how interaction abstraction and auto-waiting heuristics can mask transient UI defects.
+
+### Stale Element Re-Render Test
+
+Demonstrates how:
+- a background API update completely re-renders a results list
+- Selenium throws `StaleElementReferenceException`
+- Playwright re-queries the DOM using lazy locators and clicks the new element successfully
+
+This highlights how automatic locator healing can mask:
+- flickering UI bugs
+- unstable rendering behavior
+- interrupted user interaction flows
+- hidden DOM mutation problems
 
 ## Technologies
 
@@ -50,7 +64,9 @@ The experiments focus on:
 - accessibility behavior
 - focus handling
 - overlay interception
+- stale element behavior
 - transient UI defects
+- DOM re-rendering
 - direct DOM interaction vs real browser interaction flow
 
 ## Videos
