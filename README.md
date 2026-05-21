@@ -1,6 +1,6 @@
 # Selenium vs Playwright Interaction Fidelity Tests
 
-C#/.NET tests comparing Selenium WebDriver and Playwright interaction behavior. Demonstrates differences in keyboard navigation, tabindex accessibility issues, blocked key events, focus handling, overlay interception behavior, stale element behavior, and how direct automation APIs can bypass real user interaction paths and hide accessibility or UX defects.
+C#/.NET tests comparing Selenium WebDriver and Playwright interaction behavior. Demonstrates differences in keyboard navigation, tabindex accessibility issues, blocked key events, focus handling, overlay interception behavior, stale element behavior, focus stealing behavior, and how direct automation APIs can bypass real user interaction paths and hide accessibility or UX defects.
 
 ## Files
 
@@ -9,6 +9,7 @@ The HTML files used for the interaction experiments are located in the root of t
 - `TypingBug.html`
 - `OverlayBug.html`
 - `ReRenderBug.html`
+- `FocusBug.html`
 
 These files intentionally contain accessibility and interaction defects used to compare framework behavior.
 
@@ -43,6 +44,20 @@ This highlights how automatic locator healing can mask:
 - interrupted user interaction flows
 - hidden DOM mutation problems
 
+### Focus Stealing Test
+
+Demonstrates how:
+- a background side-effect or asynchronous update steals focus away from an active form field
+- sequential keyboard interaction becomes interrupted
+- Selenium exposes the broken focus continuity during typing
+- Playwright `.fill()` still succeeds because it bypasses continuous keyboard focus dependency
+
+This highlights how direct value injection can mask:
+- focus management bugs
+- interrupted typing flows
+- broken keyboard interaction behavior
+- accessibility focus issues
+
 ## Technologies
 
 - C#
@@ -65,6 +80,7 @@ The experiments focus on:
 - focus handling
 - overlay interception
 - stale element behavior
+- focus stealing behavior
 - transient UI defects
 - DOM re-rendering
 - direct DOM interaction vs real browser interaction flow
