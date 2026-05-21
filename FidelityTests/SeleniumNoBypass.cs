@@ -114,5 +114,33 @@ namespace SeleniumFocusTest
             // Old DOM node no longer exists
             firstResult.Click();
         }
+
+        [TestMethod]
+        public void Selenium_Should_Expose_Focus_Stealing_Bug()
+        {
+            driver.Navigate().GoToUrl(
+                "file:///C:/Users/Personal/source/repos/FidelityTests/FocusBug.html"
+            );
+
+            // Wait for input
+            var username = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(
+                    d => d.FindElement(By.Id("username")
+                )
+            );
+
+            // Focus input
+            username.SendKeys("SeleniumTyping");
+
+
+            // If focus is stolen mid-typing,
+            // Selenium will stop typing into input
+            var finalValue =
+                username.GetAttribute("value");
+
+            Assert.AreEqual(
+                "SeleniumTyping",
+                finalValue
+            );
+        }
     }
 }

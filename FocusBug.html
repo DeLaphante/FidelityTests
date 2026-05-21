@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persistent Focus Stealing Bug</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #f4f4f4;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+        }
+
+        #sidebar {
+            margin-top: 30px;
+            padding: 20px;
+            background: #ddd;
+            border-radius: 8px;
+        }
+
+        #status {
+            margin-top: 20px;
+            font-weight: bold;
+            color: darkred;
+        }
+
+    </style>
+</head>
+<body tabindex="-1">
+
+<div class="container">
+
+    <h1>Persistent Focus Stealing Bug</h1>
+
+    <p>
+        Every keystroke triggers a background side effect
+        that steals focus away from the input.
+    </p>
+
+    <input
+        id="username"
+        type="text"
+        placeholder="Type here..."
+    >
+
+    <div id="sidebar" tabindex="-1">
+        Sidebar stole focus
+    </div>
+
+    <div id="status">
+        Waiting...
+    </div>
+
+</div>
+
+<script>
+
+    const username =
+        document.getElementById("username");
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    const status =
+        document.getElementById("status");
+
+    /*
+        BUG:
+        Every input event triggers
+        unexpected focus stealing
+    */
+    username.addEventListener("input", () => {
+
+        status.innerText =
+            "Focus stolen after typing: " +
+            username.value;
+
+        // Steal focus EVERY time user types
+        sidebar.focus();
+    });
+
+    sidebar.addEventListener("focus", () => {
+
+        status.innerText =
+            "Sidebar currently has focus";
+    });
+
+</script>
+
+</body>
+</html>

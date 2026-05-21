@@ -146,4 +146,36 @@ public class PlaywrightBypass : PageTest
         // Pause so behavior is visible
         await page.WaitForTimeoutAsync(3000);
     }
+
+    [TestMethod]
+    public async Task Playwright_Should_Continue_Typing_After_Focus_Is_Stolen()
+    {
+        await page.GotoAsync(
+            "file:///C:/Users/Personal/source/repos/FidelityTests/FocusBug.html"
+        );
+
+        var username =
+            page.Locator("#username");
+
+        // Focus input
+        await username.ClickAsync();
+
+        // Start typing before focus steal occurs
+        await username.FillAsync(
+            "PlaywrightTyping");
+
+        // Get final value
+        var finalValue =
+            await username.InputValueAsync();
+
+        // Playwright often recovers/re-focuses
+        // and continues typing
+        Assert.AreEqual(
+            "PlaywrightTyping",
+            finalValue
+        );
+
+        // Show visible result
+        await page.WaitForTimeoutAsync(3000);
+    }
 }
