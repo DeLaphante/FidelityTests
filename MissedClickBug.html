@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hover Relocation Bug</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 50px;
+        }
+
+        .container {
+
+            position: relative;
+
+            width: 1000px;
+            height: 600px;
+
+            background: white;
+
+            border-radius: 10px;
+
+            padding: 30px;
+
+            overflow: hidden;
+        }
+
+        #submitButton {
+
+            position: absolute;
+
+            top: 250px;
+            left: 350px;
+
+            width: 180px;
+            height: 60px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #0078ff;
+            color: white;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            z-index: 2;
+        }
+
+        /*
+            Invisible blocker
+            appears at old coordinates
+        */
+        #ghostBlocker {
+
+            position: absolute;
+
+            top: 250px;
+            left: 350px;
+
+            width: 180px;
+            height: 60px;
+
+            background: rgba(255,0,0,0);
+
+            z-index: 5;
+
+            display: none;
+        }
+
+        #status {
+
+            position: absolute;
+
+            bottom: 40px;
+            left: 30px;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            color: darkred;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Hover Relocation Bug</h1>
+
+    <p>
+        Hovering causes the button to relocate
+        while the old location becomes blocked.
+    </p>
+
+    <button id="submitButton">
+
+        Checkout
+
+    </button>
+
+    <div id="ghostBlocker"></div>
+
+    <div id="status">
+
+        Waiting for interaction...
+
+    </div>
+
+</div>
+
+<script>
+
+    const button =
+        document.getElementById("submitButton");
+
+    const blocker =
+        document.getElementById("ghostBlocker");
+
+    const status =
+        document.getElementById("status");
+
+    let moved = false;
+
+    button.addEventListener("mouseenter", () => {
+
+        if (moved) return;
+
+        moved = true;
+
+        /*
+            Old location becomes blocked
+        */
+
+        blocker.style.display = "block";
+
+        /*
+            Button jumps elsewhere
+        */
+
+        button.style.left = "700px";
+        button.style.top = "120px";
+
+        status.innerText =
+            "Button relocated after hover";
+    });
+
+    button.addEventListener("click", () => {
+
+        status.innerText =
+            "Button clicked successfully";
+    });
+
+</script>
+
+</body>
+</html>
