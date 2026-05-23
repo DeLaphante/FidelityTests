@@ -76,3 +76,7 @@ The experiments focus on:
 
 ### Overlay Bug Experiment
 [OverlayBug.webm](https://github.com/user-attachments/assets/69b7c29d-a7af-48fc-b036-61e84ec58357)
+
+### Re-render Bug Experiment
+[ReRenderBug.webm](https://github.com/user-attachments/assets/6222ddbb-886e-481a-9c79-e98f2280b942)
+
