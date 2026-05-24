@@ -3,8 +3,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
-using System;
-using System.Threading;
 
 namespace SeleniumFocusTest
 {
@@ -136,6 +134,8 @@ namespace SeleniumFocusTest
             // Selenium will stop typing into input
             var finalValue =
                 username.GetAttribute("value");
+
+            Thread.Sleep(3000);
 
             Assert.AreEqual(
                 "SeleniumTyping",
