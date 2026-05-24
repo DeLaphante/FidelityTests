@@ -1,7 +1,6 @@
 ﻿using Microsoft.Playwright;
 using Microsoft.Playwright.MSTest;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading.Tasks;
 
 namespace PlaywrightFocusTest;
 
@@ -108,7 +107,7 @@ public class PlaywrightBypass : PageTest
             await page.Locator("#status").InnerTextAsync();
 
         Assert.AreEqual(
-            "Second button was clicked successfully",
+            "Second button clicked successfully",
             status
         );
 
