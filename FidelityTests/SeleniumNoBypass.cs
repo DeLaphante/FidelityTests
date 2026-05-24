@@ -166,6 +166,8 @@ namespace SeleniumFocusTest
                     By.Id("status")
                 ).Text;
 
+            Thread.Sleep(3000);
+
             Assert.AreEqual(
                 "Button clicked successfully",
                 status
