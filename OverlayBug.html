@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transient Overlay Bug Between Clicks</title>
+    <title>Overlay Focus Trap Bug</title>
 
     <style>
 
@@ -37,22 +37,47 @@
         }
 
         /*
-            Invisible blocking overlay
+            Invisible overlay
         */
         #overlay {
+
             position: absolute;
+
             top: 0;
             left: 0;
+
             width: 100%;
             height: 100%;
 
-            background: rgba(255,0,0,0);
+            background: rgba(0,0,0,0);
 
             z-index: 9999;
 
-            pointer-events: auto;
-
             display: none;
+
+            pointer-events: auto;
+        }
+
+        /*
+            Hidden focus trap
+        */
+        #focusTrap {
+
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+
+            transform:
+                translate(-50%, -50%);
+
+            width: 250px;
+
+            padding: 15px;
+
+            font-size: 18px;
+
+            opacity: 0;
         }
 
     </style>
@@ -61,48 +86,95 @@
 
 <div class="container">
 
-    <h1>Transient Overlay Bug</h1>
+    <h1>Overlay Focus Trap Bug</h1>
 
     <p>
-        Clicking the first button accidentally creates an invisible overlay
-        that blocks the second button for 5 seconds.
+        Clicking the first button accidentally creates
+        an invisible overlay that traps keyboard focus
+        and blocks interaction with the second button.
     </p>
 
     <button id="button1">
+
         Open Modal
+
     </button>
 
     <button id="button2">
+
         Confirm Action
+
     </button>
 
     <div id="status">
+
         Waiting...
+
     </div>
 
-    <div id="overlay"></div>
+    <div id="overlay">
+
+        <!-- Hidden focus target -->
+        <input
+            id="focusTrap"
+            type="text"
+            placeholder="Hidden trap"
+        >
+
+    </div>
 
 </div>
 
 <script>
 
-    const button1 = document.getElementById("button1");
-    const button2 = document.getElementById("button2");
-    const overlay = document.getElementById("overlay");
-    const status = document.getElementById("status");
+    const button1 =
+        document.getElementById("button1");
 
-    // First click accidentally leaves overlay behind
+    const button2 =
+        document.getElementById("button2");
+
+    const overlay =
+        document.getElementById("overlay");
+
+    const focusTrap =
+        document.getElementById("focusTrap");
+
+    const status =
+        document.getElementById("status");
+
+    /*
+        BUG:
+        Overlay appears and steals focus
+    */
+
     button1.addEventListener("click", () => {
-
-        status.innerText =
-            "Invisible overlay appeared";
 
         overlay.style.display = "block";
 
-        // Overlay disappears after 5 seconds
+        status.innerText =
+            "Invisible overlay appeared and trapped focus";
+
+        // Force focus into hidden overlay field
+        focusTrap.focus();
+
+        /*
+            Aggressive focus trap:
+            keep forcing focus back
+        */
+        document.addEventListener(
+            "focusin",
+            trapFocus
+        );
+
+        // Overlay disappears later
         setTimeout(() => {
 
             overlay.style.display = "none";
+
+            document.removeEventListener(
+                "focusin",
+                trapFocus
+            );
 
             status.innerText =
                 "Overlay disappeared after 5 seconds";
@@ -110,11 +182,28 @@
         }, 5000);
     });
 
-    // Actual target action
+    function trapFocus(event)
+    {
+        if (
+            overlay.style.display === "block" &&
+            event.target !== focusTrap
+        )
+        {
+            focusTrap.focus();
+
+            status.innerText =
+                "Focus forced back into invisible overlay";
+        }
+    }
+
+    /*
+        Intended action
+    */
+
     button2.addEventListener("click", () => {
 
         status.innerText =
-            "Second button was clicked successfully";
+            "Second button clicked successfully";
     });
 
 </script>
