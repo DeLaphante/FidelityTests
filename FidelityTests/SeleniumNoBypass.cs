@@ -173,5 +173,37 @@ namespace SeleniumFocusTest
                 status
             );
         }
+
+        [TestMethod]
+        public void Selenium_Should_Expose_Semantic_Button_Swap_Bug()
+        {
+            driver.Navigate().GoToUrl(
+                "file:///C:/Users/Personal/Desktop/AIHealerBug.html"
+            );
+
+            // Force reload so the page alternates IDs using localStorage
+            driver.Navigate().Refresh();
+
+            // Anchor to what the real user sees
+            var submitButton = new WebDriverWait(driver, TimeSpan.FromSeconds(2)).Until(
+                    d => d.FindElement(
+                        By.XPath("//button[normalize-space()='Submit Order']")
+                    )
+                );
+
+            submitButton.Click();
+
+            var status = driver.FindElement(By.Id("status")).Text;
+
+
+            Thread.Sleep(3000);
+
+            // User-visible semantic assertion
+            Assert.AreEqual(
+                "Order Submitted",
+                status,
+                "Visible 'Submit Order' button executed the wrong business action."
+            );
+        }
     }
 }
