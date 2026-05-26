@@ -120,3 +120,4 @@ The experiments focus on:
 [focusbug.webm](https://github.com/user-attachments/assets/622c860b-dded-43e7-b7a7-31d304c677bb)
 
 ### Missed Click Bug Experiment
+[missedclickbug.webm](https://github.com/user-attachments/assets/11a209fb-0bc8-406f-98a2-74b97d378b62)
