@@ -177,4 +177,35 @@ public class PlaywrightBypass : PageTest
         // Show visible result
         await page.WaitForTimeoutAsync(3000);
     }
+
+    [TestMethod]
+    public async Task Playwright_Should_Wait_And_Click_Button()
+    {
+        await page.GotoAsync(
+            "file:///C:/Users/Personal/source/repos/FidelityTests/MissedClickBug.html"
+        );
+
+        var button =
+            page.Locator("#submitButton");
+
+        // Playwright internally:
+        // - retries hover/click logic
+        // - re-resolves locator
+        // - waits for stability
+
+        await button.ClickAsync();
+
+        // Verify click eventually succeeded
+        var status =
+            await page.Locator("#status")
+                .InnerTextAsync();
+
+        Assert.AreEqual(
+            "Button clicked successfully",
+            status
+        );
+
+        // Pause so behavior is visible
+        await page.WaitForTimeoutAsync(3000);
+    }
 }

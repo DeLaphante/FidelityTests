@@ -101,7 +101,7 @@ namespace SeleniumFocusTest
             );
 
             // Selenium stores actual DOM node reference
-            var firstResult = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(
+            var firstResult = new WebDriverWait(driver, TimeSpan.FromSeconds(2)).Until(
                     d => d.FindElement(By.XPath("(//li)[1]")
                 )
             );
@@ -140,6 +140,37 @@ namespace SeleniumFocusTest
             Assert.AreEqual(
                 "SeleniumTyping",
                 finalValue
+            );
+        }
+
+        [TestMethod]
+        public void Selenium_Should_Expose_Hover_Jump_Bug()
+        {
+            driver.Navigate().GoToUrl(
+                "file:///C:/Users/Personal/source/repos/FidelityTests/MissedClickBug.html"
+            );
+
+            // Initial element reference
+            var button = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(
+                    d => d.FindElement(By.Id("submitButton"))
+            );
+
+            // Selenium moves mouse toward element
+            // Hover triggers button relocation
+            // Click often misses old coordinates
+            button.Click();
+
+            // If click somehow succeeds
+            var status =
+                driver.FindElement(
+                    By.Id("status")
+                ).Text;
+
+            Thread.Sleep(3000);
+
+            Assert.AreEqual(
+                "Button clicked successfully",
+                status
             );
         }
     }

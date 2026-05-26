@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hover Relocation Bug</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 50px;
+        }
+
+        .container {
+
+            position: relative;
+
+            width: 1000px;
+            height: 600px;
+
+            background: white;
+
+            border-radius: 10px;
+
+            padding: 30px;
+
+            overflow: hidden;
+        }
+
+        #submitButton {
+
+            position: absolute;
+
+            top: 250px;
+            left: 350px;
+
+            width: 180px;
+            height: 60px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #0078ff;
+            color: white;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            z-index: 2;
+
+            transition:
+                top 0.08s linear,
+                left 0.08s linear;
+        }
+
+        /*
+            Invisible blocker
+            remains at ORIGINAL location
+        */
+        #ghostBlocker {
+
+            position: absolute;
+
+            top: 250px;
+            left: 350px;
+
+            width: 180px;
+            height: 60px;
+
+            background: rgba(255,0,0,0);
+
+            z-index: 5;
+
+            display: none;
+
+            pointer-events: all;
+        }
+
+        #status {
+
+            position: absolute;
+
+            bottom: 40px;
+            left: 30px;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            color: darkred;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Continuous Hover Relocation Bug</h1>
+
+    <p>
+        Hovering causes the button to continuously
+        relocate every 2 seconds while the old
+        location remains blocked.
+    </p>
+
+    <button id="submitButton">
+
+        Checkout
+
+    </button>
+
+    <div id="ghostBlocker"></div>
+
+    <div id="status">
+
+        Waiting for interaction...
+
+    </div>
+
+</div>
+
+<script>
+
+    const button =
+        document.getElementById("submitButton");
+
+    const blocker =
+        document.getElementById("ghostBlocker");
+
+    const status =
+        document.getElementById("status");
+
+    let moved = false;
+
+    /*
+        Multiple relocation points
+    */
+    const positions = [
+
+        { left: "700px", top: "120px" },
+        { left: "520px", top: "380px" },
+        { left: "180px", top: "140px" },
+        { left: "760px", top: "420px" },
+        { left: "400px", top: "220px" }
+
+    ];
+
+    let currentPosition = 0;
+
+    let jitterInterval = null;
+
+    button.addEventListener("mouseenter", () => {
+
+        if (moved) return;
+
+        moved = true;
+
+        /*
+            Original location becomes blocked
+        */
+        blocker.style.display = "block";
+
+        status.innerText =
+            "Button started continuously relocating";
+
+        /*
+            Initial move immediately
+        */
+        moveButton();
+
+        /*
+            Continue moving every 2 seconds
+        */
+        jitterInterval = setInterval(() => {
+
+            moveButton();
+
+        }, 1000);
+    });
+
+    /*
+        Relocation logic
+    */
+    function moveButton()
+    {
+        const position =
+            positions[currentPosition];
+
+        button.style.left =
+            position.left;
+
+        button.style.top =
+            position.top;
+
+        status.innerText =
+            `Button moved to ${position.left}, ${position.top}`;
+
+        currentPosition++;
+
+        /*
+            Loop positions forever
+        */
+        if (currentPosition >= positions.length)
+        {
+            currentPosition = 0;
+        }
+    }
+
+    /*
+        Invisible blocker intercepts clicks
+    */
+    blocker.addEventListener("click", (event) => {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+        status.innerText =
+            "Ghost blocker intercepted click";
+    });
+
+    /*
+        Intended action
+    */
+    button.addEventListener("click", () => {
+
+        clearInterval(jitterInterval);
+
+        status.innerText =
+            "Button clicked successfully";
+    });
+
+</script>
+
+</body>
+</html>
