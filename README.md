@@ -96,3 +96,5 @@ The experiments focus on:
 ### Re-render Bug Experiment
 [ReRenderBug.webm](https://github.com/user-attachments/assets/6222ddbb-886e-481a-9c79-e98f2280b942)
 
+### Focus Bug Experiment
+[focusbug.webm](https://github.com/user-attachments/assets/622c860b-dded-43e7-b7a7-31d304c677bb)
