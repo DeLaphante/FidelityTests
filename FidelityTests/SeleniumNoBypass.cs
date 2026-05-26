@@ -101,7 +101,7 @@ namespace SeleniumFocusTest
             );
 
             // Selenium stores actual DOM node reference
-            var firstResult = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(
+            var firstResult = new WebDriverWait(driver, TimeSpan.FromSeconds(2)).Until(
                     d => d.FindElement(By.XPath("(//li)[1]")
                 )
             );
