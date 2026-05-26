@@ -8,6 +8,7 @@
     <style>
 
         body {
+
             font-family: Arial, sans-serif;
             background: #f4f4f4;
             padding: 50px;
@@ -50,11 +51,15 @@
             cursor: pointer;
 
             z-index: 2;
+
+            transition:
+                top 0.08s linear,
+                left 0.08s linear;
         }
 
         /*
             Invisible blocker
-            appears at old coordinates
+            remains at ORIGINAL location
         */
         #ghostBlocker {
 
@@ -71,6 +76,8 @@
             z-index: 5;
 
             display: none;
+
+            pointer-events: all;
         }
 
         #status {
@@ -92,11 +99,12 @@
 
 <div class="container">
 
-    <h1>Hover Relocation Bug</h1>
+    <h1>Continuous Hover Relocation Bug</h1>
 
     <p>
-        Hovering causes the button to relocate
-        while the old location becomes blocked.
+        Hovering causes the button to continuously
+        relocate every 2 seconds while the old
+        location remains blocked.
     </p>
 
     <button id="submitButton">
@@ -128,6 +136,23 @@
 
     let moved = false;
 
+    /*
+        Multiple relocation points
+    */
+    const positions = [
+
+        { left: "700px", top: "120px" },
+        { left: "520px", top: "380px" },
+        { left: "180px", top: "140px" },
+        { left: "760px", top: "420px" },
+        { left: "400px", top: "220px" }
+
+    ];
+
+    let currentPosition = 0;
+
+    let jitterInterval = null;
+
     button.addEventListener("mouseenter", () => {
 
         if (moved) return;
@@ -135,23 +160,75 @@
         moved = true;
 
         /*
-            Old location becomes blocked
+            Original location becomes blocked
         */
-
         blocker.style.display = "block";
 
-        /*
-            Button jumps elsewhere
-        */
-
-        button.style.left = "700px";
-        button.style.top = "120px";
-
         status.innerText =
-            "Button relocated after hover";
+            "Button started continuously relocating";
+
+        /*
+            Initial move immediately
+        */
+        moveButton();
+
+        /*
+            Continue moving every 2 seconds
+        */
+        jitterInterval = setInterval(() => {
+
+            moveButton();
+
+        }, 1000);
     });
 
+    /*
+        Relocation logic
+    */
+    function moveButton()
+    {
+        const position =
+            positions[currentPosition];
+
+        button.style.left =
+            position.left;
+
+        button.style.top =
+            position.top;
+
+        status.innerText =
+            `Button moved to ${position.left}, ${position.top}`;
+
+        currentPosition++;
+
+        /*
+            Loop positions forever
+        */
+        if (currentPosition >= positions.length)
+        {
+            currentPosition = 0;
+        }
+    }
+
+    /*
+        Invisible blocker intercepts clicks
+    */
+    blocker.addEventListener("click", (event) => {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+        status.innerText =
+            "Ghost blocker intercepted click";
+    });
+
+    /*
+        Intended action
+    */
     button.addEventListener("click", () => {
+
+        clearInterval(jitterInterval);
 
         status.innerText =
             "Button clicked successfully";
