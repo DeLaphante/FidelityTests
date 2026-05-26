@@ -1,6 +1,6 @@
 # Selenium vs Playwright Interaction Fidelity Tests
 
-C#/.NET tests comparing Selenium WebDriver and Playwright interaction behavior. Demonstrates differences in keyboard navigation, tabindex accessibility issues, blocked key events, focus handling, overlay interception behavior, stale element behavior, focus stealing behavior, and how direct automation APIs can bypass real user interaction paths and hide accessibility or UX defects.
+C#/.NET tests comparing Selenium WebDriver and Playwright interaction behavior. Demonstrates differences in keyboard navigation, tabindex accessibility issues, blocked key events, focus handling, overlay interception behavior, stale element behavior, focus stealing behavior, hover instability behavior, and how direct automation APIs can bypass real user interaction paths and hide accessibility or UX defects.
 
 ## Files
 
@@ -10,6 +10,7 @@ The HTML files used for the interaction experiments are located in the root of t
 - `OverlayBug.html`
 - `ReRenderBug.html`
 - `FocusBug.html`
+- `MissedClickBug.html`
 
 These files intentionally contain accessibility and interaction defects used to compare framework behavior.
 
@@ -26,10 +27,12 @@ Demonstrates how:
 
 Demonstrates how:
 - an invisible overlay temporarily blocks a button
+- keyboard focus becomes trapped inside the overlay
+- keyboard users cannot TAB to the second button
 - Selenium immediately throws `ElementClickInterceptedException`
 - Playwright waits/retries until the overlay disappears and then passes
 
-This highlights how interaction abstraction and auto-waiting heuristics can mask transient UI defects.
+This highlights how interaction abstraction and auto-waiting heuristics can mask transient UI defects and accessibility issues.
 
 ### Stale Element Re-Render Test
 
@@ -58,6 +61,21 @@ This highlights how direct value injection can mask:
 - broken keyboard interaction behavior
 - accessibility focus issues
 
+### Missed Click Stability Test
+
+Demonstrates how:
+- hovering a button causes it to unexpectedly relocate on the page
+- the original interaction path becomes invalid
+- Selenium exposes the unstable interaction surface more directly
+- Playwright waits, re-evaluates the locator, and successfully clicks the relocated element
+
+This highlights how automatic actionability checks and stability heuristics can mask:
+- hover instability bugs
+- layout shift issues
+- micro-movement interaction defects
+- unstable click targets
+- precision interaction problems affecting real users
+
 ## Technologies
 
 - C#
@@ -81,8 +99,10 @@ The experiments focus on:
 - overlay interception
 - stale element behavior
 - focus stealing behavior
+- hover instability behavior
 - transient UI defects
 - DOM re-rendering
+- unstable interaction surfaces
 - direct DOM interaction vs real browser interaction flow
 
 ## Videos
@@ -98,3 +118,5 @@ The experiments focus on:
 
 ### Focus Bug Experiment
 [focusbug.webm](https://github.com/user-attachments/assets/622c860b-dded-43e7-b7a7-31d304c677bb)
+
+### Missed Click Bug Experiment
