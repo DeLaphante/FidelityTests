@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID Swap Demo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        #status {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<button>Submit Order</button>
+<button>Cancel Order</button>
+
+<div id="status">
+    Waiting...
+</div>
+
+<script>
+
+    const leftButton = document.querySelectorAll("button")[0];
+    const rightButton = document.querySelectorAll("button")[1];
+
+    function setupButtons() {
+
+        // Guaranteed alternating state every page load
+        // based on current timestamp parity
+
+        const swap = Date.now() % 2 === 0;
+
+        if (swap) {
+
+            // IDs and titles swapped
+
+            leftButton.id = "cancelBtn";
+            leftButton.title = "Cancel";
+
+            rightButton.id = "submitBtn";
+            rightButton.title = "Submit";
+
+            console.log("IDs and titles swapped");
+        }
+        else {
+
+            // IDs and titles normal
+
+            leftButton.id = "submitBtn";
+            leftButton.title = "Submit";
+
+            rightButton.id = "cancelBtn";
+            rightButton.title = "Cancel";
+
+            console.log("IDs and titles normal");
+        }
+
+        bindEvents();
+    }
+
+    function bindEvents() {
+
+        const submitButton = document.getElementById("submitBtn");
+        const cancelButton = document.getElementById("cancelBtn");
+
+        submitButton.onclick = () => {
+
+            document.getElementById("status").innerText =
+                "Order Submitted";
+        };
+
+        cancelButton.onclick = () => {
+
+            document.getElementById("status").innerText =
+                "Order Cancelled";
+        };
+    }
+
+    setupButtons();
+
+</script>
+
+</body>
+</html>
