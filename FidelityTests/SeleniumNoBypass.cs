@@ -178,7 +178,7 @@ namespace SeleniumFocusTest
         public void Selenium_Should_Expose_Semantic_Button_Swap_Bug()
         {
             driver.Navigate().GoToUrl(
-                "file:///C:/Users/Personal/Desktop/AIHealerBug.html"
+                "file:///C:/Users/Personal/source/repos/FidelityTests/AISemanticBug.html"
             );
 
             // Force reload so the page alternates IDs using localStorage
