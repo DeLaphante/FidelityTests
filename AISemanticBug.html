@@ -6,6 +6,7 @@
     <title>ID Swap Demo</title>
 
     <style>
+
         body {
             font-family: Arial, sans-serif;
             padding: 40px;
@@ -22,76 +23,124 @@
             font-size: 20px;
             font-weight: bold;
         }
+
     </style>
+
 </head>
 <body>
 
-<button>Submit Order</button>
-<button>Cancel Order</button>
+<button>
+
+    Submit Order
+
+</button>
+
+<button>
+
+    Cancel Order
+
+</button>
 
 <div id="status">
+
     Waiting...
+
 </div>
 
 <script>
 
-    const leftButton = document.querySelectorAll("button")[0];
-    const rightButton = document.querySelectorAll("button")[1];
+    const leftButton =
+        document.querySelectorAll("button")[0];
 
-    function setupButtons() {
+    const rightButton =
+        document.querySelectorAll("button")[1];
 
-        // Guaranteed alternating state every page load
-        // based on current timestamp parity
+    const status =
+        document.getElementById("status");
 
-        const swap = Date.now() % 2 === 0;
+    let swapped = false;
 
-        if (swap) {
+    function bindEvents()
+    {
+        const submitButton =
+            document.getElementById("submitBtn");
 
-            // IDs and titles swapped
-
-            leftButton.id = "cancelBtn";
-            leftButton.title = "Cancel";
-
-            rightButton.id = "submitBtn";
-            rightButton.title = "Submit";
-
-            console.log("IDs and titles swapped");
-        }
-        else {
-
-            // IDs and titles normal
-
-            leftButton.id = "submitBtn";
-            leftButton.title = "Submit";
-
-            rightButton.id = "cancelBtn";
-            rightButton.title = "Cancel";
-
-            console.log("IDs and titles normal");
-        }
-
-        bindEvents();
-    }
-
-    function bindEvents() {
-
-        const submitButton = document.getElementById("submitBtn");
-        const cancelButton = document.getElementById("cancelBtn");
+        const cancelButton =
+            document.getElementById("cancelBtn");
 
         submitButton.onclick = () => {
 
-            document.getElementById("status").innerText =
+            status.innerText =
                 "Order Submitted";
         };
 
         cancelButton.onclick = () => {
 
-            document.getElementById("status").innerText =
+            status.innerText =
                 "Order Cancelled";
         };
     }
 
-    setupButtons();
+    function swapIds()
+    {
+        swapped = !swapped;
+
+        if (swapped)
+        {
+            /*
+                IDs swapped
+            */
+
+            leftButton.id =
+                "cancelBtn";
+
+            leftButton.title =
+                "Cancel";
+
+            rightButton.id =
+                "submitBtn";
+
+            rightButton.title =
+                "Submit";
+        }
+        else
+        {
+            /*
+                IDs normal
+            */
+
+            leftButton.id =
+                "submitBtn";
+
+            leftButton.title =
+                "Submit";
+
+            rightButton.id =
+                "cancelBtn";
+
+            rightButton.title =
+                "Cancel";
+        }
+
+        bindEvents();
+    }
+
+    /*
+        Initial state
+    */
+
+    swapIds();
+
+    /*
+        Continuously mutate IDs
+        every millisecond
+    */
+
+    setInterval(() => {
+
+        swapIds();
+
+    }, 1);
 
 </script>
 
