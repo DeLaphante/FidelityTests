@@ -16,7 +16,6 @@ namespace SeleniumFocusTest
         {
             var options = new ChromeOptions();
 
-            // Optional: slow things down visually
             options.AddArgument("--start-maximized");
 
             driver = new ChromeDriver(options);
