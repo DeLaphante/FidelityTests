@@ -1,6 +1,6 @@
 # Selenium vs Playwright Interaction Fidelity Tests
 
-C#/.NET tests comparing Selenium WebDriver and Playwright interaction behavior. Demonstrates differences in keyboard navigation, tabindex accessibility issues, blocked key events, focus handling, overlay interception behavior, stale element behavior, focus stealing behavior, hover instability behavior, semantic interaction drift, and how direct automation APIs and locator healing can bypass real user interaction paths and hide accessibility, UX, or business logic defects.
+C#/.NET tests comparing Selenium WebDriver and Playwright interaction behavior. Demonstrates differences in keyboard navigation, tabindex accessibility issues, blocked key events, focus handling, overlay interception behavior, stale element behavior, focus stealing behavior, hover instability behavior, hidden interaction contracts, semantic interaction drift, and how direct automation APIs and locator healing can bypass real user interaction paths and hide accessibility, UX, or business logic defects.
 
 ## Files
 
@@ -11,6 +11,7 @@ The HTML files used for the interaction experiments are located in the root of t
 - `ReRenderBug.html`
 - `FocusBug.html`
 - `MissedClickBug.html`
+- `ClickRequiredBug.html`
 - `AISemanticBug.html`
 
 These files intentionally contain accessibility, interaction, rendering, and semantic behavior defects used to compare framework behavior.
@@ -77,6 +78,55 @@ This highlights how automatic actionability checks and stability heuristics can 
 - unstable click targets
 - precision interaction problems affecting real users
 
+### Bonus: Click Required Accessibility Test
+
+Demonstrates how:
+- an input field silently requires a mouse click before typing works
+- keyboard users can TAB into the field but cannot enter text
+- screen reader and keyboard-only users are impacted
+- Selenium `.SendKeys()` exposes the defect immediately
+- a test that performs `.Click()` before typing can unintentionally hide the defect
+
+The experiment intentionally creates an interaction contract violation where:
+- the input appears normal
+- the field receives focus correctly
+- typing is blocked unless a mouse click occurs first
+- every new focus session requires another click
+
+A high-fidelity keyboard interaction exposes the defect:
+
+```csharp
+var input =
+    driver.FindElement(
+        By.Id("customerName"));
+
+input.SendKeys("John");
+
+Assert.AreEqual(
+    "",
+    input.GetAttribute("value"),
+    "Keyboard user should not be able to type."
+);
+```
+
+The issue can easily be masked by introducing a click:
+
+```csharp
+input.Click();
+input.SendKeys("John");
+```
+
+This highlights how test design choices can influence defect visibility and how hidden mouse dependencies can remain undiscovered when automation assumes a click-based interaction path.
+
+The experiment demonstrates defects involving:
+- keyboard accessibility
+- hidden interaction contracts
+- mouse-dependent behavior
+- focus vs activation discrepancies
+- screen reader accessibility issues
+- interaction fidelity
+- real user workflow validation
+
 ### Bonus: AI Semantic Drift Test
 
 Demonstrates how:
@@ -126,6 +176,7 @@ This repository explores the difference between:
 - validating DOM state
 - validating authentic user interaction behavior
 - validating semantic business correctness
+- validating accessibility interaction contracts
 
 It demonstrates how abstraction layers in automation frameworks can change defect visibility and interaction fidelity.
 
@@ -137,6 +188,9 @@ The experiments focus on:
 - stale element behavior
 - focus stealing behavior
 - hover instability behavior
+- hidden mouse dependencies
+- accessibility interaction contracts
+- keyboard-only user workflows
 - semantic interaction drift
 - transient UI defects
 - DOM re-rendering
@@ -162,6 +216,8 @@ The experiments focus on:
 ### Missed Click Bug Experiment
 [missedclickbug.webm](https://github.com/user-attachments/assets/11a209fb-0bc8-406f-98a2-74b97d378b62)
 
+### Click Required Accessibility Experiment
+[ClickRequiredBug.webm](https://github.com/user-attachments/assets/13d21eab-86b3-47b9-a152-546b3e5035b4)
+
 ### AI Semantic Bug Experiment
 [AISemanticBug.webm](https://github.com/user-attachments/assets/6bbe70e6-b361-4af5-9383-ec7f152924cd)
-
