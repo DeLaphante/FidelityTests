@@ -214,7 +214,7 @@ public class PlaywrightBypass : PageTest
     {
 
         await page.GotoAsync(
-            "file:///C:/Users/Personal/Desktop/ClickRequiredBug.html");
+            "file:///C:/Users/Personal/source/repos/FidelityTests/ClickRequiredBug.html");
 
         var input =
             page.Locator("#customerName");

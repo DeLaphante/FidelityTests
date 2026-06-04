@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Required Accessibility Bug</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 50px;
+        }
+
+        .container {
+
+            background: white;
+            padding: 40px;
+            max-width: 700px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        input {
+
+            width: 350px;
+
+            padding: 15px;
+
+            font-size: 18px;
+
+            margin-top: 20px;
+        }
+
+        button {
+
+            display: block;
+
+            margin-top: 20px;
+
+            padding: 12px 20px;
+
+            font-size: 16px;
+        }
+
+        #status {
+
+            margin-top: 30px;
+
+            font-weight: bold;
+
+            color: darkred;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Click Required Accessibility Bug</h1>
+
+    <p>
+        This input has a defect where every focus session
+        requires a mouse click before typing works.
+    </p>
+
+    <p>
+        Keyboard users can tab into the field,
+        but cannot type until they physically click it.
+    </p>
+
+    <input
+        id="customerName"
+        placeholder="Enter your name"
+    >
+
+    <button>
+
+        Next Field
+
+    </button>
+
+    <div id="status">
+
+        Waiting for interaction...
+
+    </div>
+
+</div>
+
+<script>
+
+    const input =
+        document.getElementById(
+            "customerName"
+        );
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+    /*
+        Mouse activation only valid
+        for current focus session
+    */
+    let mouseActivated = false;
+
+    /*
+        User MUST click
+        every time they enter field
+    */
+    input.addEventListener(
+        "mousedown",
+        () => {
+
+            mouseActivated = true;
+
+            status.innerText =
+                "Input activated by mouse click";
+        }
+    );
+
+    /*
+        Keyboard users can focus
+        but typing will not work
+    */
+    input.addEventListener(
+        "focus",
+        () => {
+
+            if (!mouseActivated)
+            {
+                status.innerText =
+                    "Focused without click. Typing blocked.";
+            }
+        }
+    );
+
+    /*
+        Leaving field resets activation
+    */
+    input.addEventListener(
+        "blur",
+        () => {
+
+            mouseActivated = false;
+
+            status.innerText =
+                "Activation removed. Click required again.";
+        }
+    );
+
+    /*
+        Typing blocked unless
+        click happened first
+    */
+    input.addEventListener(
+        "keydown",
+        (event) => {
+
+            if (!mouseActivated)
+            {
+                event.preventDefault();
+
+                status.innerText =
+                    "Typing blocked. Click required.";
+            }
+        }
+    );
+
+</script>
+
+</body>
+</html>

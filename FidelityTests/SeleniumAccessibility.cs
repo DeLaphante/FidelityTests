@@ -30,7 +30,7 @@ namespace SeleniumFocusTest
         public void KeyboardUserCannotUseInput()
         {
             driver.Navigate().GoToUrl(
-                "file:///C:/Users/Personal/Desktop/ClickRequiredBug.html");
+                "file:///C:/Users/Personal/source/repos/FidelityTests/ClickRequiredBug.html");
 
             var input =
                 driver.FindElement(
@@ -49,7 +49,7 @@ namespace SeleniumFocusTest
         public void MouseUserCanTypeAfterClick()
         {
             driver.Navigate().GoToUrl(
-                  "file:///C:/Users/Personal/Desktop/ClickRequiredBug.html");
+                  "file:///C:/Users/Personal/source/repos/FidelityTests/ClickRequiredBug.html");
 
             var input =
                 driver.FindElement(
