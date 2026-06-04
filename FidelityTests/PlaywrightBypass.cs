@@ -208,4 +208,25 @@ public class PlaywrightBypass : PageTest
         // Pause so behavior is visible
         await page.WaitForTimeoutAsync(3000);
     }
+
+    [TestMethod]
+    public async Task KeyboardUserCannotTypeWithoutClick()
+    {
+
+        await page.GotoAsync(
+            "file:///C:/Users/Personal/Desktop/ClickRequiredBug.html");
+
+        var input =
+            page.Locator("#customerName");
+
+        await input.FillAsync(
+            "John");
+
+        var value =
+            await input.InputValueAsync();
+
+        Assert.AreEqual(
+            "John",
+            value);
+    }
 }
