@@ -9,7 +9,7 @@ namespace SeleniumFocusTest
     [TestClass]
     public class SeleniumNoBypass
     {
-        private IWebDriver driver;
+        private IWebDriver? driver;
 
         [TestInitialize]
         public void Setup()
@@ -203,6 +203,38 @@ namespace SeleniumFocusTest
                 status,
                 "Visible 'Submit Order' button executed the wrong business action."
             );
+        }
+
+        [TestMethod]
+        public void UserMustNavigateBackToQuantityControl()
+        {
+            driver.Navigate().GoToUrl(
+                @"file:///C:/Users/Personal/source/repos/FidelityTests/LoseFocusBug.html");
+
+            driver.FindElement(By.Id("firstName")).SendKeys("John");
+
+            driver.FindElement(By.Id("lastName")).SendKeys("Smith");
+
+            driver.FindElement(By.Id("emailAddress")).SendKeys("john.smith@test.com");
+
+            driver.FindElement(By.Id("deliveryAddress")).SendKeys("1 Test Street");
+
+            driver.FindElement(By.Id("applyCoupon")).Click();
+
+            var button = new WebDriverWait(driver, TimeSpan.FromSeconds(10)).Until(
+                d => d.FindElement(By.Id("increaseButton")));
+
+            button.Click();
+
+            Assert.AreEqual(
+                "2",
+                driver.FindElement(By.Id("quantity")).Text);
+
+            button.Click();
+
+            Assert.AreEqual(
+                "3",
+                driver.FindElement(By.Id("quantity")).Text);
         }
     }
 }

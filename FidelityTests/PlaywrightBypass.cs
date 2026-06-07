@@ -229,4 +229,41 @@ public class PlaywrightBypass : PageTest
             "John",
             value);
     }
+
+    [TestMethod]
+    public async Task UserMustNavigateBackToQuantityControl()
+    {
+
+        await page.GotoAsync(
+            @"file:///C:/Users/Personal/source/repos/FidelityTests/LoseFocusBug.html");
+
+        await page.Locator("#firstName")
+            .FillAsync("John");
+
+        await page.Locator("#lastName")
+            .FillAsync("Smith");
+
+        await page.Locator("#emailAddress")
+            .FillAsync("john.smith@test.com");
+
+        await page.Locator("#deliveryAddress")
+            .FillAsync("1 Test Street");
+
+        await page.Locator("#applyCoupon")
+            .ClickAsync();
+
+        var button = page.Locator("#increaseButton");
+
+        await button.ClickAsync();
+
+        Assert.AreEqual(
+            "2",
+            await page.Locator("#quantity").TextContentAsync());
+
+        await button.ClickAsync();
+
+        Assert.AreEqual(
+            "3",
+            await page.Locator("#quantity").TextContentAsync());
+    }
 }

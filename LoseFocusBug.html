@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quantity Control Focus Loss Demo</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    padding: 40px;
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+p {
+    margin-bottom: 20px;
+}
+
+.form-section {
+    margin-bottom: 15px;
+}
+
+input {
+    padding: 10px;
+    width: 300px;
+    font-size: 16px;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.quantity-panel {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    display: inline-block;
+}
+
+#quantity {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 15px;
+}
+
+#status {
+    margin-top: 20px;
+    color: red;
+    font-weight: bold;
+}
+
+#focusInfo {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+#focusTarget {
+    color: blue;
+}
+</style>
+</head>
+
+<body tabindex="-1">
+
+<h1>Shopping Cart Quantity Demo</h1>
+
+<p>
+Use the + button to increase the quantity.
+</p>
+
+<p>
+This demo intentionally contains a bug. Every time the quantity is increased,
+the component is destroyed and recreated, causing keyboard focus to be lost.
+</p>
+
+<div class="form-section">
+    <input id="firstName"
+           type="text"
+           placeholder="First Name">
+</div>
+
+<div class="form-section">
+    <input id="lastName"
+           type="text"
+           placeholder="Last Name">
+</div>
+
+<div class="form-section">
+    <input id="emailAddress"
+           type="email"
+           placeholder="Email Address">
+</div>
+
+<div class="form-section">
+    <input id="deliveryAddress"
+           type="text"
+           placeholder="Delivery Address">
+</div>
+
+<div class="form-section">
+    <button id="applyCoupon"
+            type="button">
+        Apply Coupon
+    </button>
+</div>
+
+<div id="productContainer">
+
+    <div class="quantity-panel">
+
+        <strong>Product Quantity</strong>
+
+        <div style="margin-top:15px;">
+
+            Quantity:
+            <span id="quantity">1</span>
+
+            <button id="increaseButton"
+                    type="button"
+                    aria-label="Increase quantity">
+                +
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="status"></div>
+
+<div id="focusInfo">
+    Current Focus:
+    <span id="focusTarget">None</span>
+</div>
+
+<script>
+
+let quantity = 1;
+
+function updateFocusDisplay() {
+
+    const active = document.activeElement;
+
+    let description = active.tagName;
+
+    if (active.id) {
+        description += "#" + active.id;
+    }
+
+    document.getElementById("focusTarget").textContent =
+        description;
+}
+
+document.addEventListener("focusin", updateFocusDisplay);
+
+updateFocusDisplay();
+
+document.addEventListener("click", function (e) {
+
+    if (e.target.id !== "increaseButton") {
+        return;
+    }
+
+    quantity++;
+
+    document.getElementById("status").textContent =
+        "Quantity updated. Re-rendering component...";
+
+    const container =
+        document.getElementById("productContainer");
+
+    // Destroy and recreate the quantity component immediately
+    container.innerHTML = `
+        <div class="quantity-panel">
+
+            <strong>Product Quantity</strong>
+
+            <div style="margin-top:15px;">
+
+                Quantity:
+                <span id="quantity">${quantity}</span>
+
+                <button id="increaseButton"
+                        type="button"
+                        aria-label="Increase quantity">
+                    +
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    document.getElementById("status").textContent =
+        "Component recreated. Focus lost. Keyboard users must navigate back through First Name, Last Name, Email Address, Delivery Address and Apply Coupon before reaching the quantity control again.";
+
+    // Simulate focus loss after re-render
+    document.body.focus();
+
+    updateFocusDisplay();
+});
+
+</script>
+
+</body>
+</html>
