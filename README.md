@@ -321,5 +321,8 @@ The experiments focus on:
 ### Click Required Accessibility Experiment
 [ClickRequiredBug.webm](https://github.com/user-attachments/assets/13d21eab-86b3-47b9-a152-546b3e5035b4)
 
+### Focus Loss Accessibility Experiment
+[LoseFocusBug.webm](https://github.com/user-attachments/assets/44d30add-23ce-422f-9341-0621c79edbe5)
+
 ### AI Semantic Bug Experiment
 [AISemanticBug.webm](https://github.com/user-attachments/assets/6bbe70e6-b361-4af5-9383-ec7f152924cd)
