@@ -12,6 +12,7 @@ The HTML files used for the interaction experiments are located in the root of t
 - `FocusBug.html`
 - `MissedClickBug.html`
 - `ClickRequiredBug.html`
+- `LoseFocusBug.html`
 - `AISemanticBug.html`
 
 These files intentionally contain accessibility, interaction, rendering, and semantic behavior defects used to compare framework behavior.
@@ -126,6 +127,104 @@ The experiment demonstrates defects involving:
 - screen reader accessibility issues
 - interaction fidelity
 - real user workflow validation
+  
+### Bonus: Focus Loss Accessibility Test
+
+Demonstrates how:
+
+- a quantity control is destroyed and recreated after each interaction
+- keyboard focus is lost after increasing the quantity
+- keyboard-only users must navigate back through unrelated controls to continue interacting
+- Selenium exposes the DOM replacement via `StaleElementReferenceException`
+- Playwright automatically re-resolves the locator and continues successfully
+
+The experiment intentionally creates a focus-management defect where:
+
+- a user completes several form fields
+- a quantity control receives focus
+- increasing the quantity triggers a component re-render
+- the original button is destroyed and replaced
+- focus falls back to the document
+- the user must navigate through the form again before reaching the quantity control
+
+The page contains several interactive elements before the quantity control:
+
+```text
+First Name
+Last Name
+Email Address
+Delivery Address
+Apply Coupon
+Quantity [+]
+```
+
+A high-fidelity Selenium interaction exposes the defect:
+
+```csharp
+driver.FindElement(By.Id("firstName"))
+    .SendKeys("John");
+
+driver.FindElement(By.Id("lastName"))
+    .SendKeys("Smith");
+
+driver.FindElement(By.Id("emailAddress"))
+    .SendKeys("john.smith@test.com");
+
+driver.FindElement(By.Id("deliveryAddress"))
+    .SendKeys("1 Test Street");
+
+var button =
+    driver.FindElement(
+        By.Id("increaseButton"));
+
+button.Click();
+
+Assert.AreEqual(
+    "2",
+    driver.FindElement(
+        By.Id("quantity")).Text);
+
+button.Click();
+```
+
+Result:
+
+```text
+StaleElementReferenceException
+```
+
+The exception occurs because the quantity component was destroyed and recreated immediately after the first click.
+
+The equivalent Playwright test passes:
+
+```csharp
+var button =
+    page.Locator("#increaseButton");
+
+await button.ClickAsync();
+
+await button.ClickAsync();
+```
+
+because Playwright re-resolves the locator against the newly rendered button.
+
+This highlights how automatic locator healing can mask:
+
+- focus-management defects
+- accessibility regressions
+- disrupted keyboard workflows
+- DOM replacement issues
+- user disorientation after interaction
+- hidden navigation costs
+
+The experiment also demonstrates the difference between:
+
+- interaction continuity for automation
+- interaction continuity for real users
+
+A Playwright test can continue interacting successfully after the component is recreated, while a keyboard user may have lost focus entirely and be forced to navigate back through multiple controls before continuing.
+
+This makes the stale element exception more than a DOM implementation detail—it becomes a signal that a potentially user-visible focus and accessibility problem should be investigated.
 
 ### Bonus: AI Semantic Drift Test
 
@@ -184,13 +283,16 @@ The experiments focus on:
 - keyboard realism
 - accessibility behavior
 - focus handling
+- focus loss after re-render
 - overlay interception
 - stale element behavior
 - focus stealing behavior
 - hover instability behavior
 - hidden mouse dependencies
 - accessibility interaction contracts
+- accessibility regressions caused by DOM replacement
 - keyboard-only user workflows
+- keyboard navigation recovery
 - semantic interaction drift
 - transient UI defects
 - DOM re-rendering
